@@ -21,8 +21,8 @@ export default function SignupPage() {
         axios.post("http://localhost:5000/signup", body)
         .then(res=>{
             setDisabled(false)
-             alert('Usuário criado com sucesso!')
-             navigate("/")
+            alert('Usuário criado com sucesso!')
+            navigate("/")
         })
         .catch(err=>{
             if(err.response.status === 409) alert("Email já cadastrado")

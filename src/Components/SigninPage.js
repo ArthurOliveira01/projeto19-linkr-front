@@ -1,13 +1,31 @@
 import { useState } from "react"
 import styled from "styled-components"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import axios from "axios"
 
 export default function SigninPage() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [disabled, setDisabled] = useState(false)
+    let navigate = useNavigate()
 
     function submit() {
+        setDisabled(true)
+        if(!email || !password) {
+            setDisabled(false)
+            return alert('Todas as informações são necessárias para login')}
+        const body = {email: email, password: password}
 
+        axios.post("http://localhost:5000/", body)
+        .then(res=>{
+            localStorage.setItem("token", res.data)
+            navigate("/timeline")
+        })
+        .catch(err=> {
+            if(err.response.status === 404) alert('E-mail informado não encontrado')
+            if(err.response.status === 409) alert('Senha incorreta')
+            setDisabled(false)
+        })
     }
 
     return (
@@ -19,7 +37,7 @@ export default function SigninPage() {
             <SigninPageRight>
                 <input placeholder="e-mail" value={email} onChange={e=>setEmail(e.target.value)}/>
                 <input placeholder="password" value={password} onChange={e=>setPassword(e.target.value)}/>
-                <But onClick={submit}>Sign In</But>
+                <But onClick={submit} disabled={disabled} cor={disabled}>Sign In</But>
                 <Link to="/signup"><p>Switch back to login</p></Link>
             </SigninPageRight>
         </SigninPageContainer>
