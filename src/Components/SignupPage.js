@@ -1,7 +1,40 @@
-import { Link } from "react-router-dom"
+import axios from "axios"
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 
 export default function SignupPage() {
+
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [username, setUsername] = useState("")
+    const [foto, setFoto] = useState("")
+    const [disabled, setDisabled] = useState(false)
+    let navigate = useNavigate()
+
+    function submit() {
+        setDisabled(true)
+        const body = {email: email, password: password, name: username, foto: foto}
+        if(!email || !password || !username || !foto) {
+            setDisabled(false)
+            return alert('Todos os campos são obrigatórios')}
+        axios.post("http://localhost:5000/signup", body)
+        .then(res=>{
+            setDisabled(false)
+             alert('Usuário criado com sucesso!')
+             navigate("/signin")
+        })
+        .catch(err=>{
+            if(err.response.status === 409) alert("Email já cadastrado")
+            setDisabled(false)
+            setEmail("")
+            setFoto("")
+            setPassword("")
+            setUsername("")
+        })
+    }
+
+
     return (
 
         <SignupPageContainer>
@@ -10,13 +43,12 @@ export default function SignupPage() {
                 <p>save, share and discover the best links on the web</p>
             </SignupPageLeft>
             <SignupPageRight>
-                <input placeholder="e-mail"/>
-                <input placeholder="password"/>
-                <input placeholder="username"/>
-                <input placeholder="picture url"/>
-                <button>Sign Up</button>
-                <Link><p>Switch back to login</p></Link>
-                
+                <input placeholder="e-mail" value={email} onChange={e=>setEmail(e.target.value)}/>
+                <input placeholder="password" value={password} onChange={e=>setPassword(e.target.value)}/>
+                <input placeholder="username" value={username} onChange={e=>setUsername(e.target.value)}/>
+                <input placeholder="picture url" value={foto} onChange={e=>setFoto(e.target.value)}/>
+                <But onClick={submit} disabled={disabled} cor={disabled}>Sign Up</But>
+                <Link to="/signin"><p>Switch back to login</p></Link>
             </SignupPageRight>
         </SignupPageContainer>
     )
@@ -102,19 +134,6 @@ const SignupPageRight = styled.div`
         }
     }
 
-    button {
-        width: 30.3vw;
-        height: 8vh;
-        margin: 8px 0;
-        background-color: #1877f2;
-        border-radius: 6px;
-        color: #ffffff;
-
-        font-family: 'Oswald', sans-serif;
-        font-weight: 700;
-        font-size: 25px;
-    }
-
     p {
         font-family: 'Lato', sans-serif;
         font-weight: 400;
@@ -134,9 +153,22 @@ const SignupPageRight = styled.div`
         input {
             width: 90vw;
         }
+    }
+`
 
-        button {
-            width: 90.3vw;
-        }
+const But = styled.button`
+    width: 30.3vw;
+    height: 8vh;
+    margin: 8px 0;
+    background: ${props=>props.cor ? "#cccccc" : "#1877f2"};
+    border-radius: 6px;
+    color: #ffffff;
+
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 25px;
+
+    @media (max-width: 800px) {
+        width: 90.3vw;
     }
 `
