@@ -22,7 +22,7 @@ export default function SignupPage() {
         .then(res=>{
             setDisabled(false)
              alert('Usuário criado com sucesso!')
-             navigate("/signin")
+             navigate("/")
         })
         .catch(err=>{
             if(err.response.status === 409) alert("Email já cadastrado")
@@ -48,7 +48,7 @@ export default function SignupPage() {
                 <input placeholder="username" value={username} onChange={e=>setUsername(e.target.value)}/>
                 <input placeholder="picture url" value={foto} onChange={e=>setFoto(e.target.value)}/>
                 <But onClick={submit} disabled={disabled} cor={disabled}>Sign Up</But>
-                <Link to="/signin"><p>Switch back to login</p></Link>
+                <Link to="/"><p>Switch back to login</p></Link>
             </SignupPageRight>
         </SignupPageContainer>
     )
