@@ -1,70 +1,14 @@
+import { useState } from "react";
+import axios from "axios";
+import styled from "styled-components";
 
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-
-
-export function UserPage(){
-
-    const [posts, setPosts] = useState([]);
-    const [trending, setTrending] = useState([]);
-    const { id } = useParams();
-
-    useEffect(
-        () => {
-            axios.get(`http://localhost:5000/users/${id}`)
-            .then(
-                (res) => {
-                    setPosts(res.data.posts)
-                }
-            )
-            .catch(
-                (err) => {
-                    alert(err.response.status)
-                }
-            )
-        }
-    , [])
-   
-
-    return(
-        <>
-        <Header />
-        <Main>
-            <InfoContainer>
-                <img />
-                <h1>(user)'s posts</h1>
-            </InfoContainer>
-            <ContentWrapper>
-                <PostContainer>
-                    {
-                        posts.map(
-                            p => <Post />
-                        )
-                    }
-                </PostContainer>
-                <TrendingContainer>
-                    <h1>trending</h1>
-                    <ul>
-                        {
-                            trending.map(
-                                (t) => <TrendItem />
-                            )
-                        }
-                    </ul>
-                </TrendingContainer>
-            </ContentWrapper>
-        </Main>
-        </>
-    )
-}
-
-const Header = () => {
+export const HeaderTestPage = () => {
 
     const [search, setSearch] = useState("");
     const [users, setUsers] = useState([])
 
     function searchusers(e){
-        axios.get("http://localhost:5000/users", {search: e.target.value})
+        /*axios.get("http://localhost:5000/users", {search: e.target.value})
         .then(
             (res) => {
                 setUsers(res.data)
@@ -72,7 +16,7 @@ const Header = () => {
         )
         .catch(
             (err) => {alert(err.response.status)}
-        )
+        )*/
     }
 
 
@@ -92,7 +36,7 @@ const Header = () => {
                 </UserList>}
             </SearchContainer>
             <UserIcon>
-                <img />
+                <img src="https://i.imgur.com/RBviXsl.jpeg" />
             </UserIcon>
         </HeaderContainer>
     )
@@ -122,9 +66,9 @@ color: #FFFFFF;
 `
 
 const SearchContainer = styled.div`
-
+width: 40%;
 input{
-    width: 40%;
+    width: 100%;
     height: 45px;
     background: white;
     border-radius: 8px;
@@ -154,3 +98,5 @@ border-radius: 100%;
 const UserList = styled.div`
 
 `
+
+const User = styled.div``;
