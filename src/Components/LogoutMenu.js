@@ -71,9 +71,14 @@ const MenuContainer = styled.div`
     width: auto;
     height: auto;
     padding: 5px 25px;
-    background-color: green;
+    background-color: #151515;
+    font-family: 'Lato', sans-serif;
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 700;
+    border-radius: 0 0 0 20px;
     position: fixed;
-    top: 9vh;
+    top: 10vh;
     left: 92vw;
     display: ${props=>!props.menu ? "flex" : "none"};
 `
