@@ -1,13 +1,25 @@
 import styled from "styled-components"
 import { LogoutMenu } from "../LogoutMenu"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import PostElement from "./PostElement"
 import Hashtag from "./HashtagsElement"
 import TimelinesPosts from "./TimelinePostElement"
+import axios from "axios"
 
 export function TestPage() {
 
     const [menu, setMenu] = useState(true)
+    const [hashtags, setHashtags] = useState()
+
+    useEffect(()=>{
+        axios.get("http://localhost:5000/hashtags")
+        .then(res=>{
+            setHashtags(res.data)
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    },[])
 
     function exitMenu() {
         if(!menu) setMenu(true)
@@ -24,11 +36,13 @@ export function TestPage() {
                 <h1>timeline</h1>
                 <PostElement/>
                 <TimelinesPosts/>
+                <TimelinesPosts/>
+                <TimelinesPosts/>
             </TestPagePostsContainer>
 
 
             
-            <Hashtag/>
+            <Hashtag hashtags={hashtags}/>
 
         </TestPageContainer>
     )

@@ -1,6 +1,11 @@
 import styled from "styled-components"
 
-export default function Hashtag() {
+export default function Hashtag({hashtags}) {
+
+    function show() {
+        console.log(hashtags)
+    }
+
     return (
         <HashtagsContainer>
                 <HashtagElement>
@@ -8,16 +13,7 @@ export default function Hashtag() {
                         <h2>trending</h2>
                     </HashtagTitleContainer>
                     <HashtagItensContainer>
-                        <p># javascript</p>
-                        <p># react</p>
-                        <p># react-native</p>
-                        <p># material</p>
-                        <p># web-dev</p>
-                        <p># mobile</p>
-                        <p># css</p>
-                        <p># html</p>
-                        <p># node</p>
-                        <p># sql</p>
+                        {hashtags && hashtags.map(el=> <p id={el.hashtag}># {el.hashtag}</p>)}
                     </HashtagItensContainer>
                     
                 </HashtagElement>
