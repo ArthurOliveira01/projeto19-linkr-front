@@ -28,20 +28,19 @@ export default function Hashtag() {
 const HashtagsContainer = styled.div`
     width: 40vw;
     height: auto;
-    margin-top: 10vh;
-    
+    margin-top: 10vh;    
 `
 
 const HashtagElement = styled.div`
     width: 25vw;
     height: 45vh;
     background-color: #171717;
-    margin-top: 16.3vh;
+    margin-top: 15vh;
     border-radius: 16px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-left: 10px;
+    margin-left: 10px;    
 `
 
 const HashtagTitleContainer = styled.div`
@@ -52,7 +51,6 @@ const HashtagTitleContainer = styled.div`
     align-items: center;
     border-bottom: 1px solid #484848;
     
-
     h2 {
         font-family: 'Oswald', sans-serif;
         font-size: 27px;

@@ -3,6 +3,7 @@ import { LogoutMenu } from "../LogoutMenu"
 import { useState } from "react"
 import PostElement from "./PostElement"
 import Hashtag from "./HashtagsElement"
+import TimelinesPosts from "./TimelinePostElement"
 
 export function TestPage() {
 
@@ -14,15 +15,20 @@ export function TestPage() {
 
     return (
         <TestPageContainer onClick={exitMenu}>
+
             <TestPageHeader onClick={exitMenu}>
                 <LogoutMenu menu={menu} setMenu={setMenu}/>
             </TestPageHeader>
-                <TestPagePostsContainer>
-                    <h1>timeline</h1>
-                    <PostElement/>
-                </TestPagePostsContainer>
-                
-                <Hashtag/>
+
+            <TestPagePostsContainer>
+                <h1>timeline</h1>
+                <PostElement/>
+                <TimelinesPosts/>
+            </TestPagePostsContainer>
+
+
+            
+            <Hashtag/>
 
         </TestPageContainer>
     )
@@ -35,9 +41,6 @@ const TestPageContainer = styled.div`
     background-color: #333333;
     display: flex;
     overflow: scroll;
-   /*  flex-direction: column; */
-
-    
 `
 
 const TestPageHeader = styled.div`
@@ -53,9 +56,6 @@ const TestPagePostsContainer = styled.div`
     width: 60vw;
     height: auto;
     margin-top: 10vh;
-    /* position: fixed;
-    top: 10vh;
-    left: 0; */
 
     display: flex;
     flex-direction: column;
