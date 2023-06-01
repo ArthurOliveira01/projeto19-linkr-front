@@ -1,15 +1,17 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import styled from "styled-components";
+import axios from "axios";
 
 
 export function UserPage(){
 
     const [posts, setPosts] = useState([]);
     const [trending, setTrending] = useState([]);
-    const { id } = useParams();
+    /* const { id } = useParams(); */
 
-    useEffect(
+    /* useEffect(
         () => {
             axios.get(`http://localhost:5000/users/${id}`)
             .then(
@@ -23,7 +25,7 @@ export function UserPage(){
                 }
             )
         }
-    , [])
+    , []) */
    
 
     return(
@@ -36,20 +38,18 @@ export function UserPage(){
             </InfoContainer>
             <ContentWrapper>
                 <PostContainer>
-                    {
-                        posts.map(
-                            p => <Post />
-                        )
-                    }
+                    <Post name="Juvenal Juvêncio" text="Muito maneiro esse tutorial de Material UI com React, deem uma olhada!" hashtags="#react #material" />
+                    <Post name="Juvenal Juvêncio" text="Muito maneiro esse tutorial de Material UI com React, deem uma olhada!" hashtags="#react #material" />
                 </PostContainer>
                 <TrendingContainer>
                     <h1>trending</h1>
                     <ul>
-                        {
-                            trending.map(
-                                (t) => <TrendItem />
-                            )
-                        }
+                        <TrendItem trend="trend1" />
+                        <TrendItem trend="trend2" />
+                        <TrendItem trend="trend3" />
+                        <TrendItem trend="trend4" />
+                        <TrendItem trend="trend5" />
+                        <TrendItem trend="trend6" />
                     </ul>
                 </TrendingContainer>
             </ContentWrapper>
@@ -58,12 +58,185 @@ export function UserPage(){
     )
 }
 
+const Main = styled.main`
+background: #333333;
+width: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+padding-top: 50px;
+gap: 41px;
+`
+
+const InfoContainer = styled.div`
+width: 65%;
+text-align: center;
+display: flex;
+gap: 18px;
+h1{
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 43px;
+    line-height: 64px;
+    color: #FFFFFF;
+}
+
+img{
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+}
+`
+
+const ContentWrapper = styled.div`
+width: 65%;
+display: flex;
+gap: 2.6%;
+
+`
+
+const PostContainer = styled.div`
+width: 65%;
+display: flex;
+flex-direction: column;
+gap: 16px;
+`
+
+const Post = (props) => {
+
+    return(
+        <PostWrapper>
+        <ImgandLikes>
+        <img />
+        <ion />
+        <h4>13 likes</h4>
+        </ImgandLikes>
+        <PostContentWrapper>
+            <h1>{props.name}</h1>
+            <h2>{props.text} <span>{props.hashtags}</span></h2>
+        </PostContentWrapper>
+        </PostWrapper>
+    )
+}
+
+const PostWrapper = styled.article`
+width: 100%;
+background: #171717;
+border-radius: 16px;
+height: 276px;
+display: flex;
+padding: 3%;
+gap: 3%;
+
+`
+
+const ImgandLikes = styled.div`
+display: flex;
+flex-direction: column;
+gap: 19px;
+width: 8.1%;
+img{
+width: 50px;
+height: 50px;
+border-radius: 100%;
+}
+
+h4{
+    font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 11px;
+line-height: 13px;
+text-align: center;
+color: white;
+}
+
+`
+
+const PostContentWrapper = styled.div`
+width: 82.9%;
+display: flex;
+flex-direction: column;
+gap: 7px;
+h1{
+    font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 19px;
+line-height: 23px;
+color: white;
+}
+
+h2{
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 17px;
+line-height: 20px;
+
+color: #B7B7B7;
+}
+
+span{
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 20px;
+    color: white;
+    font-weight: bold;
+    }
+`
+
+const TrendingContainer = styled.div`
+width: 32.4%;
+height: 406px;
+background: #171717;
+border-radius: 16px;
+display: flex;
+flex-direction: column;
+gap: 22px;
+padding-right: 5.3%;
+h1{
+    font-family: 'Oswald';
+font-style: normal;
+font-weight: 700;
+font-size: 27px;
+line-height: 40px;
+color: #FFFFFF;
+}
+
+ul{
+    text-decoration: none;
+}
+
+li{
+    font-family: 'Lato';
+font-style: normal;
+font-weight: 700;
+font-size: 19px;
+line-height: 23px;
+letter-spacing: 0.05em;
+
+color: #FFFFFF;
+}
+`
+
+const TrendItem = (props) => {
+    return(
+        <li>
+            # {props.trend}
+        </li>
+    )
+}
+
 const Header = () => {
 
     const [search, setSearch] = useState("");
     const [users, setUsers] = useState([])
 
-    function searchusers(e){
+function searchusers(e){
         axios.get("http://localhost:5000/users", {search: e.target.value})
         .then(
             (res) => {
@@ -84,11 +257,6 @@ const Header = () => {
             {users.length === 0 ?
             <></>:
             <UserList>
-                {
-                    users.map(
-                        (u) => <User />
-                    )
-                }
                 </UserList>}
             </SearchContainer>
             <UserIcon>

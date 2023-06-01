@@ -3,6 +3,7 @@ import { HeaderTestPage } from "./Components/HeaderTestPage";
 import SigninPage from "./Components/SigninPage";
 import SignupPage from "./Components/SignupPage";
 import { TestPage } from "./Components/Tests/Testpage";
+import { UserPage } from "./Components/UserPage";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/signup" element={<SignupPage/>}/>
         <Route path="/teste" element={<TestPage/>}/>
         <Route path="/header" element={<HeaderTestPage />} />
+        <Route path="/usertest" element={<UserPage />} />
       </Routes>
     </BrowserRouter>
   );
