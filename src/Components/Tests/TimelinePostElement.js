@@ -1,40 +1,70 @@
 import styled from "styled-components"
 import Heart from "../../Assets/icons8-heart-100.png"
 import HeartRed from "../../Assets/icons8-heart-100 (1).png"
-import { useState } from "react"
+import { useState, useEffect } from "react";
+import axios from 'axios';
 
 export default function TimelinesPosts() {
 
-    const [liked, setLiked] = useState(false)
+    const [liked, setLiked] = useState(false);
+    const [posts, setPosts] = useState([]);
+
+    useEffect(
+        () => {
+            axios.get(`http://localhost:5000/content`)
+            .then(
+                (res) => {
+                    setPosts(res.data);
+                    console.log(posts)
+                    console.log(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    alert(err.response.status)
+                }
+            )
+        }
+    , [])
 
     function like() {
         setLiked(!liked)
     }
 
+    function openPage(link){
+        window.open(link, '_blank')
+    }
+
+
+
     return (
-        <TimelinePostElementContainer>
-            <FotoContainer>
-                <img src="https://images2.alphacoders.com/649/649995.jpg"/>
+        <>
+        {posts.map((post, index) => (
+            <TimelinePostElementContainer key={index}>
+              <FotoContainer>
+                <img src="https://images2.alphacoders.com/649/649995.jpg" />
                 <LikeContainer>
-                    <img src={liked ? HeartRed : Heart} onClick={like}/>
-                    <p>10 likes</p>
+                  <img src={liked ? HeartRed : Heart} onClick={like} />
+                  <p>10 likes</p>
                 </LikeContainer>
-            </FotoContainer>
-
-            <TimelinePostInfoContainer>
+              </FotoContainer>
+          
+              <TimelinePostInfoContainer>
                 <h2>Nome do Usuário</h2>
-                <p>Muito maneiro esse tutorial de Material UI com React, deem uma olhada! #react #material</p>
-                <SnippetContainer>
-                    <div>
-                        <h2>Como aplicar o Material UI em um projeto React</h2>
-                        <p>Hey! I have moved this tutorial to my personal blog. Same content, new location. Sorry about making you click through to another page</p>
-                        <a>https://medium.com/@pshrmn/a-simple-react-router</a>
-                    </div>
-                    <img src="https://images2.alphacoders.com/649/649995.jpg"/>
+                <p>{post.description}</p>
+                <SnippetContainer onClick={() => { openPage(post.link) }}>
+                  <div>
+                    <h2>Como aplicar o Material UI em um projeto React</h2>
+                    <p>Hey! I have moved this tutorial to my personal blog. Same content, new location. Sorry about making you click through to another page</p>
+                    <a href={post.link}>{post.link}</a>
+                  </div>
+                  <img src="https://images2.alphacoders.com/649/649995.jpg" />
                 </SnippetContainer>
+              </TimelinePostInfoContainer>
+            </TimelinePostElementContainer>
+          ))}
 
-            </TimelinePostInfoContainer>
-        </TimelinePostElementContainer>
+        </>
     )
 }
 
@@ -123,7 +153,9 @@ const SnippetContainer = styled.div`
     height: 170px;
     display: flex;
     margin: 0 0 10px 0;
-
+    :hover{
+        cursor: pointer;
+    }
     div {
         width: calc(100% - 170px);
         border-radius: 11px 0 0 11px;

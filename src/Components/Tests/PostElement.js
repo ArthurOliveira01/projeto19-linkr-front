@@ -1,6 +1,31 @@
-import styled from "styled-components"
+import styled from "styled-components";
+import { useState } from "react";
+import axios from 'axios';
+import { Link, useNavigate } from "react-router-dom"
 
-export default function PostElement() {
+export default function PostElement({header}) {
+    const [link, setLink] = useState('');
+    const [description, setDescription] = useState('');
+    let navigate = useNavigate()
+
+    function sendPost(){
+        if(link.length === 0){
+            return alert('Você deve preencher o link');
+        }
+        const body = {
+            link: link,
+            description: description
+        }
+
+        axios.post("http://localhost:5000/content", body, header)
+        .then(res=>{
+            navigate("/timeline");
+            return alert('postado com sucesso');
+        })
+        .catch(err=> {
+            alert(err);
+        })
+    }
     return(
         <TestPagePostElementContainer>
             <TestPagePostInfosContainer>
@@ -9,12 +34,12 @@ export default function PostElement() {
                 </FotoContainer>
                 <PostInfoContainer>
                     <h2>What are you going to share today?</h2>
-                    <input placeholder="https://..."></input>
-                    <textarea cols={40} rows={4} placeholder="Awesome article about ..."></textarea>
+                    <input placeholder="https://..."onChange={(event) => setLink(event.target.value)}></input>
+                    <textarea cols={40} rows={4} placeholder="Awesome article about ..." onChange={(event) => setDescription(event.target.value)}></textarea>
                 </PostInfoContainer>
             </TestPagePostInfosContainer>
             <TestPagePostButtonContainer>
-                <button>Publish</button>
+                <button onClick={sendPost}>Publish</button>
             </TestPagePostButtonContainer>
         </TestPagePostElementContainer>
     )
