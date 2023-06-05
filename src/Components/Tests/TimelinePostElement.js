@@ -8,6 +8,7 @@ export default function TimelinesPosts() {
 
     const [liked, setLiked] = useState(false);
     const [posts, setPosts] = useState([]);
+    const [ownerInfo, setOwnerInfo] = useState([]);
 
     useEffect(
         () => {
@@ -15,8 +16,11 @@ export default function TimelinesPosts() {
             .then(
                 (res) => {
                     setPosts(res.data);
-                    console.log(posts)
-                    console.log(res.data);
+                    console.log(posts);
+                    let aux = [];
+                    for(let i = 0; i < posts.length; i++){
+                        aux.push()
+                    }
                 }
             )
             .catch(

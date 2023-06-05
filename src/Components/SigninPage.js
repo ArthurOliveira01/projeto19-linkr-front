@@ -35,10 +35,10 @@ export default function SigninPage() {
                 <p>save, share and discover the best links on the web</p>
             </SigninPageLeft>
             <SigninPageRight>
-                <input placeholder="e-mail" value={email} onChange={e=>setEmail(e.target.value)}/>
-                <input placeholder="password" value={password} onChange={e=>setPassword(e.target.value)}/>
-                <But onClick={submit} disabled={disabled} cor={disabled}>Sign In</But>
-                <Link to="/signup"><p>Switch back to login</p></Link>
+                <input data-test="email" placeholder="e-mail" value={email} onChange={e=>setEmail(e.target.value)}/>
+                <input data-test="password" placeholder="password" value={password} onChange={e=>setPassword(e.target.value)}/>
+                <But data-test="login-btn" onClick={submit} disabled={disabled} cor={disabled}>Sign In</But>
+                <Link data-test="sign-up-link" to="/sign-up"><p>First time? Create an account!</p></Link>
             </SigninPageRight>
         </SigninPageContainer>
     )

@@ -15,7 +15,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<SigninPage/>}/>
-        <Route path="/signup" element={<SignupPage/>}/>
+        <Route path="/sign-up" element={<SignupPage/>}/>
         <Route path="/teste" element={<TestPage/>}/>
         <Route path="/header" element={<HeaderTestPage />} />
         <Route path="/timeline" element={<TimelinePage token={token} setToken={setToken} />} />

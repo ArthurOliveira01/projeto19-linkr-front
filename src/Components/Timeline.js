@@ -11,9 +11,9 @@ import arrowDown from "../Assets/arrow-204-32.png";
 
 
 export function TimelinePage({token, setToken}){
-
+    const [clicked, setClicked] = useState(false);
     const [picture, setPicture] = useState('');
-    setToken('8403e4f7-dd67-4455-b2d0-8c245210cc32');
+    setToken('e88abb51-0c40-4d11-8770-9295ac2945d0');
     console.log(token);
     const header = { headers: { Authorization: `Bearer ${token}` } };
 
@@ -39,7 +39,7 @@ export function TimelinePage({token, setToken}){
 
     return(
         <>
-        <Header picture={picture} />
+        <Header clicked={clicked} setClicked={setClicked} picture={picture} />
         <Main>
             <InfoContainer>
                 <h1>timeline</h1>
@@ -119,6 +119,14 @@ function searchusers(e){
         )
     }
 
+    function logOut(){
+        if(props.clicked){
+            props.setClicked(false)
+        } else{
+            props.setClicked(true)
+        }
+    }
+
 
     return(
         <HeaderContainer>
@@ -131,7 +139,7 @@ function searchusers(e){
                 </UserList>}
             </SearchContainer>
             <UserIcon>
-                <Arrow src={arrowDown} />
+                <Arrow onClick={logOut} src={props.clicked ? arrowUp : arrowDown} />
                 <img src={props.picture} />
             </UserIcon>
         </HeaderContainer>

@@ -43,11 +43,11 @@ export default function SignupPage() {
                 <p>save, share and discover the best links on the web</p>
             </SignupPageLeft>
             <SignupPageRight>
-                <input placeholder="e-mail" value={email} onChange={e=>setEmail(e.target.value)}/>
-                <input placeholder="password" value={password} onChange={e=>setPassword(e.target.value)}/>
-                <input placeholder="username" value={username} onChange={e=>setUsername(e.target.value)}/>
-                <input placeholder="picture url" value={foto} onChange={e=>setFoto(e.target.value)}/>
-                <But onClick={submit} disabled={disabled} cor={disabled}>Sign Up</But>
+                <input data-test="email" placeholder="e-mail" value={email} onChange={e=>setEmail(e.target.value)}/>
+                <input data-test="password" placeholder="password" value={password} onChange={e=>setPassword(e.target.value)}/>
+                <input data-test="username" placeholder="username" value={username} onChange={e=>setUsername(e.target.value)}/>
+                <input data-test="picture-url" placeholder="picture url" value={foto} onChange={e=>setFoto(e.target.value)}/>
+                <But data-test="sign-up-btn" onClick={submit} disabled={disabled} cor={disabled}>Sign Up</But>
                 <Link to="/"><p>Switch back to login</p></Link>
             </SignupPageRight>
         </SignupPageContainer>
