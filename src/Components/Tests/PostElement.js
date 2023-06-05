@@ -27,15 +27,15 @@ export default function PostElement({header}) {
         })
     }
     return(
-        <TestPagePostElementContainer>
+        <TestPagePostElementContainer data-test="publish-box">
             <TestPagePostInfosContainer>
                 <FotoContainer>
                     <img src="https://images2.alphacoders.com/649/649995.jpg"/>
                 </FotoContainer>
                 <PostInfoContainer>
                     <h2>What are you going to share today?</h2>
-                    <input placeholder="https://..."onChange={(event) => setLink(event.target.value)}></input>
-                    <textarea cols={40} rows={4} placeholder="Awesome article about ..." onChange={(event) => setDescription(event.target.value)}></textarea>
+                    <input data-test="link" placeholder="https://..."onChange={(event) => setLink(event.target.value)}></input>
+                    <textarea data-test="description" cols={40} rows={4} placeholder="Awesome article about ..." onChange={(event) => setDescription(event.target.value)}></textarea>
                 </PostInfoContainer>
             </TestPagePostInfosContainer>
             <TestPagePostButtonContainer>

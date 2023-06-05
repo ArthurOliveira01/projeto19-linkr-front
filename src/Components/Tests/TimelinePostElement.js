@@ -41,7 +41,7 @@ export default function TimelinesPosts() {
     return (
         <>
         {posts.map((post, index) => (
-            <TimelinePostElementContainer key={index}>
+            <TimelinePostElementContainer data-test="post" key={index}>
               <FotoContainer>
                 <img  src={post.foto}/>
                 <LikeContainer>
@@ -51,9 +51,9 @@ export default function TimelinesPosts() {
               </FotoContainer>
           
               <TimelinePostInfoContainer>
-                <h2>{post.username}</h2>
-                <p>{post.description}</p>
-                <SnippetContainer onClick={() => { openPage(post.link) }}>
+                <h2 data-test="username">{post.username}</h2>
+                <p data-test="description">{post.description}</p>
+                <SnippetContainer data-test="link" onClick={() => { openPage(post.link) }}>
                   <div>
                     <h2>Como aplicar o Material UI em um projeto React</h2>
                     <p>Hey! I have moved this tutorial to my personal blog. Same content, new location. Sorry about making you click through to another page</p>
