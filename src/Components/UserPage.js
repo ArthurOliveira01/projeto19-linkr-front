@@ -1,45 +1,82 @@
 
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
-
+import { HeaderTestPage } from "./HeaderTestPage";
+import { DebounceInput } from "react-debounce-input";
 
 export function UserPage(){
 
     const [posts, setPosts] = useState([]);
     const [trending, setTrending] = useState([]);
-    /* const { id } = useParams(); */
+    const [search, setSearch] = useState("");
+    const [users, setUsers] = useState([1]);
+    const navigate = useNavigate();
+    const { id } = useParams(); 
+    const [user, setUser]= useState({name: "", img: ""})
+    
 
-    /* useEffect(
-        () => {
-            axios.get(`http://localhost:5000/users/${id}`)
+    useEffect(
+        () => {console.log(parseInt(id));
+            axios.get(`http://localhost:5000/user/${id}`)
             .then(
                 (res) => {
-                    setPosts(res.data.posts)
+                    setPosts(res.data.posts);
+                    setUser({name: res.data.name, img: res.data.foto}) 
                 }
             )
             .catch(
                 (err) => {
                     alert(err.response.status)
                 }
-            )
+            );
+            
         }
-    , []) */
+    , [])
+
+    function searchusers(e){
+        console.log(e.target.value);
+        axios.get("http://localhost:5000/users", {headers: {search: e.target.value}})
+        .then(
+            (res) => {
+                setUsers(res.data)
+            }
+        )
+        .catch(
+            (err) => {alert(err.response.status)}
+        ) 
+    }
+
+    
    
 
     return(
         <>
-        <Header />
+        <HeaderTestPage />
+        
         <Main>
+        <SearchContainer2 search={users}>
+            <DebounceInput minLength={3} debounceTimeout={300} onChange={searchusers} type="text" name="search" placeholder="Search for people" />
+            {users.length === 0 ?
+            <></>:
+            <UserList>
+                {users.map(
+                    (u) => <User name={u.name} foto={u.foto} />
+                )}
+                </UserList>}
+            </SearchContainer2>
             <InfoContainer>
-                <img />
-                <h1>(user)'s posts</h1>
+                <img src={user.img} />
+                <h1>{user.name}'s posts</h1>
             </InfoContainer>
             <ContentWrapper>
                 <PostContainer>
-                    <Post name="Juvenal Juvêncio" text="Muito maneiro esse tutorial de Material UI com React, deem uma olhada!" hashtags="#react #material" />
-                    <Post name="Juvenal Juvêncio" text="Muito maneiro esse tutorial de Material UI com React, deem uma olhada!" hashtags="#react #material" />
+                    {
+                        posts.map(
+                            (p) => <Post user={user} name={user.name} text={p.description} />
+                        )
+                    }
                 </PostContainer>
                 <TrendingContainer>
                     <h1>trending</h1>
@@ -62,14 +99,21 @@ const Main = styled.main`
 background: #333333;
 width: 100%;
 display: flex;
+margin-top: 53px;
 flex-direction: column;
 align-items: center;
 padding-top: 50px;
 gap: 41px;
+box-sizing: border-box;
 `
 
 const InfoContainer = styled.div`
 width: 65%;
+
+@media (max-width: 768px) {
+    width: 100%;
+  }
+
 text-align: center;
 display: flex;
 gap: 18px;
@@ -80,6 +124,7 @@ h1{
     font-size: 43px;
     line-height: 64px;
     color: #FFFFFF;
+    padding-left: 16px;
 }
 
 img{
@@ -92,15 +137,26 @@ img{
 const ContentWrapper = styled.div`
 width: 65%;
 display: flex;
-gap: 2.6%;
+gap: 5%;
+margin-bottom: 16px;
+position: relative;
+box-sizing: border-box;
 
+@media (max-width: 768px) {
+    flex-direction: column;
+    width: 100%;
+  }
 `
 
 const PostContainer = styled.div`
 width: 65%;
+@media (max-width: 768px) {
+    width: 100%;
+  }
 display: flex;
 flex-direction: column;
 gap: 16px;
+box-sizing: border-box;
 `
 
 const Post = (props) => {
@@ -108,8 +164,8 @@ const Post = (props) => {
     return(
         <PostWrapper>
         <ImgandLikes>
-        <img />
-        <ion />
+        <img src={props.user.img} />
+        <ion-icon name="heart-outline"/>
         <h4>13 likes</h4>
         </ImgandLikes>
         <PostContentWrapper>
@@ -124,6 +180,10 @@ const PostWrapper = styled.article`
 width: 100%;
 background: #171717;
 border-radius: 16px;
+@media (max-width: 768px) {
+    border-radius: 0;
+    gap: 8%;
+  }
 height: 276px;
 display: flex;
 padding: 3%;
@@ -139,6 +199,11 @@ width: 8.1%;
 img{
 width: 50px;
 height: 50px;
+@media (max-width: 768px) {
+    width: 40px;
+height: 40px;
+  }
+
 border-radius: 100%;
 }
 
@@ -152,6 +217,13 @@ text-align: center;
 color: white;
 }
 
+ion-icon{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
 `
 
 const PostContentWrapper = styled.div`
@@ -159,11 +231,15 @@ width: 82.9%;
 display: flex;
 flex-direction: column;
 gap: 7px;
+
 h1{
     font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
 font-size: 19px;
+@media (max-width: 768px) {
+    font-size: 17px;
+  }
 line-height: 23px;
 color: white;
 }
@@ -174,7 +250,9 @@ font-style: normal;
 font-weight: 400;
 font-size: 17px;
 line-height: 20px;
-
+@media (max-width: 768px) {
+    font-size: 15px;
+  }
 color: #B7B7B7;
 }
 
@@ -183,21 +261,36 @@ span{
     font-style: normal;
     font-weight: 400;
     font-size: 17px;
+    @media (max-width: 768px) {
+        font-size: 15px;
+      }
     line-height: 20px;
     color: white;
     font-weight: bold;
     }
 `
 
+const TrendingWrapper = styled.div`
+width: 32.4%;
+position: relative;
+`
+
 const TrendingContainer = styled.div`
 width: 32.4%;
+box-sizing: border-box;
+
+@media (max-width: 768px) {
+    display: none;
+  }
+
 height: 406px;
 background: #171717;
 border-radius: 16px;
 display: flex;
 flex-direction: column;
 gap: 22px;
-padding-right: 5.3%;
+padding-left: 5.3%;
+box-sizing: border-box;
 h1{
     font-family: 'Oswald';
 font-style: normal;
@@ -231,71 +324,66 @@ const TrendItem = (props) => {
     )
 }
 
-const Header = () => {
+const UserList = styled.div`
+width: 100%;
+display: flex;
+flex-direction: column;
+background: #E7E7E7;
+border-bottom-right-radius: 8px;
+border-bottom-left-radius: 8px;
+gap: 20px;
+padding-top: 24px;
+padding-bottom: 24px;
+position: absolute;
+top: 100%;
+box-sizing: border-box;
+z-index: 1000;
+`
 
-    const [search, setSearch] = useState("");
-    const [users, setUsers] = useState([])
-
-function searchusers(e){
-        axios.get("http://localhost:5000/users", {search: e.target.value})
-        .then(
-            (res) => {
-                setUsers(res.data)
-            }
-        )
-        .catch(
-            (err) => {alert(err.response.status)}
-        )
-    }
-
-
+const User = (props) => {
     return(
-        <HeaderContainer>
-            <h1>linkr</h1>
-            <SearchContainer>
-            <input onChange={searchusers} type="text" name="search" placeholder="Search for people" />
-            {users.length === 0 ?
-            <></>:
-            <UserList>
-                </UserList>}
-            </SearchContainer>
-            <UserIcon>
-                <img />
-            </UserIcon>
-        </HeaderContainer>
+        <UserWrapper>
+            <img src={props.foto}/>
+            <h2>{props.name}</h2>
+        </UserWrapper>
     )
 }
 
-const HeaderContainer = styled.header`
-width: 100%;
-height: 72px;
-background: #151515;
+const UserWrapper = styled.div`
 display: flex;
-padding-left: 28px;
-padding-right: 28px;
-align-items: center;
-justify-content: space-between;
-
-h1{
-    font-family: 'Passion One';
+padding-left: 16px;
+gap: 12px;
+img{
+    border-radius: 100%;
+    width: 39px;
+height: 39px;
+}
+h2{
+    font-family: 'Lato';
 font-style: normal;
-font-weight: 700;
-font-size: 49px;
-line-height: 54px;
-letter-spacing: 0.05em;
-color: #FFFFFF;
+font-weight: 400;
+font-size: 19px;
+line-height: 23px;
+color: #515151;
 }
 
-
 `
-
-const SearchContainer = styled.div`
-
+const SearchContainer2 = styled.div`
+width: 95%;
+position: relative;
+@media (max-width: 768px) {
+    display: block;
+  }
+  display: none;
 input{
-    width: 40%;
+    width: 100%;
     height: 45px;
     background: white;
-    border-radius: 8px;
+    border: 0px;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: ${props => props.search.length !== 0 ? "0" : "8px"};
+    border-bottom-right-radius: ${props => props.search.length !== 0 ? "0" : "8px"};
     font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
@@ -305,20 +393,6 @@ color: #C6C6C6;
 padding-right: 14px;
 display: flex;
 align-items: center;
+box-sizing: border-box;
 }
-`
-
-const UserIcon = styled.div`
-display: flex;
-
-img{
-    width: 53px;
-height: 53px;
-border-radius: 100%;
-
-}
-`
-
-const UserList = styled.div`
-
 `
