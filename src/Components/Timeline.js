@@ -15,7 +15,7 @@ export function TimelinePage({token, setToken}){
     const [picture, setPicture] = useState('');
     setToken('e88abb51-0c40-4d11-8770-9295ac2945d0');
     console.log(token);
-    const header = { headers: { Authorization: `Bearer ${token}` } };
+    const header = { headers: { Authorization: `Bearer e88abb51-0c40-4d11-8770-9295ac2945d0` } };
 
     useEffect(
         () => {

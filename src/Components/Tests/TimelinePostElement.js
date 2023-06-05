@@ -12,15 +12,12 @@ export default function TimelinesPosts() {
 
     useEffect(
         () => {
+            console.log('oi');
             axios.get(`http://localhost:5000/content`)
             .then(
-                (res) => {
+                (res) => {                    
                     setPosts(res.data);
-                    console.log(posts);
-                    let aux = [];
-                    for(let i = 0; i < posts.length; i++){
-                        aux.push()
-                    }
+                    console.log(res.data);
                 }
             )
             .catch(
@@ -46,7 +43,7 @@ export default function TimelinesPosts() {
         {posts.map((post, index) => (
             <TimelinePostElementContainer key={index}>
               <FotoContainer>
-                <img src="https://images2.alphacoders.com/649/649995.jpg" />
+                <img  src={post.foto}/>
                 <LikeContainer>
                   <img src={liked ? HeartRed : Heart} onClick={like} />
                   <p>10 likes</p>
@@ -54,7 +51,7 @@ export default function TimelinesPosts() {
               </FotoContainer>
           
               <TimelinePostInfoContainer>
-                <h2>Nome do Usuário</h2>
+                <h2>{post.username}</h2>
                 <p>{post.description}</p>
                 <SnippetContainer onClick={() => { openPage(post.link) }}>
                   <div>
