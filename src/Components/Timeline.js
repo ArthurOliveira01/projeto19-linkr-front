@@ -147,14 +147,14 @@ function searchusers(e){
 }
 
 const Arrow = styled.img`
-    width: 40px;
-    height: 40px;
+    width: 18px;
+    height: 18px;
     left: 50%;
     top: 50%;
 `
 
 const HeaderContainer = styled.header`
-width: 100%;
+width: 97%;
 height: 72px;
 background: #151515;
 display: flex;
@@ -200,7 +200,7 @@ align-items: center;
 
 const UserIcon = styled.div`
 display: flex;
-
+align-items: center;
 img:last-child{
     width: 53px;
     height: 53px;
