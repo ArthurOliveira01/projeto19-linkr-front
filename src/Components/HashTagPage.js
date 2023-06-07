@@ -1,20 +1,21 @@
 import styled from "styled-components"
-import { LogoutMenu } from "../LogoutMenu"
-import { useEffect, useState } from "react"
-import PostElement from "./PostElement"
-import Hashtag from "./HashtagsElement"
-import TimelinesPosts from "./TimelinePostElement"
+import { useState, useEffect } from "react"
 import axios from "axios"
+import { LogoutMenu } from "./LogoutMenu"
+import PostElement from "./Tests/PostElement"
+import TimelinesPosts from "./Tests/TimelinePostElement"
+import Hashtag from "./Tests/HashtagsElement"
 
-export function TestPage() {
-
+export default function HashTagPage () {
     const [menu, setMenu] = useState(true)
     const [hashtags, setHashtags] = useState()
+    const [top, setTop] = useState()
 
     useEffect(()=>{
         axios.get("http://localhost:5000/hashtags")
         .then(res=>{
             setHashtags(res.data)
+            setTop(res.data[0].hashtag)
         })
         .catch(err=>{
             console.log(err)
@@ -26,27 +27,23 @@ export function TestPage() {
     }
 
     return (
-        <TestPageContainer onClick={exitMenu}>
-
-            <TestPageHeader onClick={exitMenu}>
+        <HashTagPageContainer>
+            <HashtagPageHeader>
                 <LogoutMenu menu={menu} setMenu={setMenu}/>
-            </TestPageHeader>
+            </HashtagPageHeader>
 
-            <TestPagePostsContainer>
-                <h1>timeline</h1>
-                <PostElement/>
+            <HahshtagPagePostsContainer>
+                <h1># {top && top}</h1>
                 <TimelinesPosts/>
-            </TestPagePostsContainer>
+            </HahshtagPagePostsContainer>
 
-
-            
             <Hashtag hashtags={hashtags}/>
-
-        </TestPageContainer>
+            
+        </HashTagPageContainer>
     )
 }
 
-const TestPageContainer = styled.div`
+const HashTagPageContainer = styled.div`
     width: 100%;
     height: auto;
     min-height: 100vh;
@@ -55,7 +52,7 @@ const TestPageContainer = styled.div`
     overflow: scroll;
 `
 
-const TestPageHeader = styled.div`
+const HashtagPageHeader = styled.div`
     width: 100%;
     height: 10vh;
     background-color: #151515;
@@ -64,7 +61,8 @@ const TestPageHeader = styled.div`
     left: 0;
 `
 
-const TestPagePostsContainer = styled.div`
+
+const HahshtagPagePostsContainer = styled.div`
     width: 60vw;
     height: auto;
     margin-top: 10vh;

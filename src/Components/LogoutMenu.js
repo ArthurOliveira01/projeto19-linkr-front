@@ -61,8 +61,8 @@ const FotoContainer = styled.div`
     align-items: center;
 
     img {
-        width: 4.5vw;
-        height: 4.5vw;
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
     }
 `

@@ -12,7 +12,6 @@ export default function TimelinesPosts() {
 
     useEffect(
         () => {
-            console.log('oi');
             axios.get(`http://localhost:5000/content`)
             .then(
                 (res) => {                    
@@ -22,7 +21,7 @@ export default function TimelinesPosts() {
             )
             .catch(
                 (err) => {
-                    alert(err.response.status)
+                    console.log(err)
                 }
             )
         }

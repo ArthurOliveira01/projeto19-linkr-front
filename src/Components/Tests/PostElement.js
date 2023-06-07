@@ -23,7 +23,7 @@ export default function PostElement({header}) {
             return alert('postado com sucesso');
         })
         .catch(err=> {
-            alert(err);
+            console.log(err);
         })
     }
     return(
