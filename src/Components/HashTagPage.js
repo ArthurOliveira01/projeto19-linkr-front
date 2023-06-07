@@ -5,6 +5,7 @@ import { LogoutMenu } from "./LogoutMenu"
 import PostElement from "./Tests/PostElement"
 import TimelinesPosts from "./Tests/TimelinePostElement"
 import Hashtag from "./Tests/HashtagsElement"
+import { HeaderTestPage } from "./HeaderTestPage"
 
 export default function HashTagPage () {
     const [menu, setMenu] = useState(true)
@@ -28,9 +29,8 @@ export default function HashTagPage () {
 
     return (
         <HashTagPageContainer>
-            <HashtagPageHeader>
-                <LogoutMenu menu={menu} setMenu={setMenu}/>
-            </HashtagPageHeader>
+            <HeaderTestPage />
+
 
             <HahshtagPagePostsContainer>
                 <h1># {top && top}</h1>
@@ -82,3 +82,8 @@ const HahshtagPagePostsContainer = styled.div`
         color: #ffffff;
     }
 `
+
+
+/* <HashtagPageHeader>
+                <LogoutMenu menu={menu} setMenu={setMenu}/>
+            </HashtagPageHeader> */

@@ -4,9 +4,9 @@ import { HeaderTestPage } from "./Components/HeaderTestPage";
 import SigninPage from "./Components/SigninPage";
 import SignupPage from "./Components/SignupPage";
 import { TestPage } from "./Components/Tests/Testpage";
-import { UserPage } from "./Components/UserPage";
 import { TimelinePage } from "./Components/Timeline";
 import HashTagPage from "./Components/HashTagPage";
+import { UserPage } from "./Components/UserPage";
 
 
 function App() {
@@ -21,6 +21,7 @@ function App() {
         <Route path="/header" element={<HeaderTestPage />} />
         <Route path="/timeline" element={<TimelinePage token={token} setToken={setToken} />} />
         <Route path="/hashtag/:hashtag" element={<HashTagPage/>}/>
+        <Route path="/user/:id" element={<UserPage />} />
       </Routes>
     </BrowserRouter>
   );
