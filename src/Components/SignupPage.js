@@ -10,7 +10,7 @@ export default function SignupPage() {
     const [username, setUsername] = useState("")
     const [foto, setFoto] = useState("")
     const [disabled, setDisabled] = useState(false)
-    let navigate = useNavigate()
+    let navigate = useNavigate()    
 
     function submit() {
         setDisabled(true)
