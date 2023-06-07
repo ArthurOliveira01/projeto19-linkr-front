@@ -1,36 +1,36 @@
 
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import PostElement from "./Tests/PostElement";
 import TimelinesPosts from "./Tests/TimelinePostElement";
 import arrowUp from "../Assets/arrow-142-32.png";
 import arrowDown from "../Assets/arrow-204-32.png";
-
+import urlMetadata from "url-metadata";
 
 
 export function TimelinePage({token, setToken}){
     const [clicked, setClicked] = useState(false);
     const [picture, setPicture] = useState('');
-    setToken('e88abb51-0c40-4d11-8770-9295ac2945d0');
+    setToken('9810b939-b106-43cd-8641-cf3adfea9f4e');
     console.log(token);
-    const header = { headers: { Authorization: `Bearer e88abb51-0c40-4d11-8770-9295ac2945d0` } };
-
+    const header = { headers: { Authorization: `Bearer 9810b939-b106-43cd-8641-cf3adfea9f4e` } };
     useEffect(
         () => {
+            console.log(token);
             console.log(header);
+            
             axios.get(`http://localhost:5000/info`, header)
             .then(
                 (res) => {
                     setPicture(res.data.foto);
-                    console.log(picture);
+                    console.log(res.data);
                     console.log(res.data.foto);
                 }
             )
             .catch(
                 (err) => {
-                    alert(err.response.status)
+                    alert(err.response.message)
                 }
             )
         }
@@ -45,10 +45,10 @@ export function TimelinePage({token, setToken}){
                 <h1>timeline</h1>
             </InfoContainer>
             <PostContent>
-                <PostElement header={header} />
+                <PostElement header={header} picture={picture} />
             </PostContent>
             <ContentWrapper>
-                <TimelinesPosts />
+                <TimelinesPosts header={header} />
             </ContentWrapper>
         </Main>
         </>
@@ -147,14 +147,14 @@ function searchusers(e){
 }
 
 const Arrow = styled.img`
-    width: 40px;
-    height: 40px;
+    width: 18px;
+    height: 18px;
     left: 50%;
     top: 50%;
 `
 
 const HeaderContainer = styled.header`
-width: 100%;
+width: 97%;
 height: 72px;
 background: #151515;
 display: flex;
@@ -200,7 +200,7 @@ align-items: center;
 
 const UserIcon = styled.div`
 display: flex;
-
+align-items: center;
 img:last-child{
     width: 53px;
     height: 53px;

@@ -3,13 +3,16 @@ import { useState } from "react";
 import axios from 'axios';
 import { Link, useNavigate } from "react-router-dom"
 
-export default function PostElement({header}) {
+export default function PostElement({header, picture}) {
     const [link, setLink] = useState('');
     const [description, setDescription] = useState('');
+    const [disabled, setDisabled] = useState(false);
     let navigate = useNavigate()
 
     function sendPost(){
+        setDisabled(true);
         if(link.length === 0){
+            setDisabled(false);
             return alert('Você deve preencher o link');
         }
         const body = {
@@ -20,6 +23,7 @@ export default function PostElement({header}) {
         axios.post("http://localhost:5000/content", body, header)
         .then(res=>{
             navigate("/timeline");
+            setDisabled(false);
             return alert('postado com sucesso');
         })
         .catch(err=> {
@@ -30,7 +34,7 @@ export default function PostElement({header}) {
         <TestPagePostElementContainer data-test="publish-box">
             <TestPagePostInfosContainer>
                 <FotoContainer>
-                    <img src="https://images2.alphacoders.com/649/649995.jpg"/>
+                    <img src={picture} />
                 </FotoContainer>
                 <PostInfoContainer>
                     <h2>What are you going to share today?</h2>
@@ -39,7 +43,7 @@ export default function PostElement({header}) {
                 </PostInfoContainer>
             </TestPagePostInfosContainer>
             <TestPagePostButtonContainer>
-                <button onClick={sendPost}>Publish</button>
+                <button disabled={disabled} cor={disabled} onClick={sendPost}>Publish</button>
             </TestPagePostButtonContainer>
         </TestPagePostElementContainer>
     )
@@ -141,7 +145,7 @@ const TestPagePostButtonContainer = styled.div`
     button {
         width: 112px;
         height: 31px;
-        background: #1877f2;
+        background-color: ${props=>props.cor ? "hsl(218, 87%, 57%)" : "#1877f2"};
         border-radius: 5px;
         border: none;
 
