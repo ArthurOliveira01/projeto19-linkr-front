@@ -21,6 +21,7 @@ function App() {
         <Route path="/header" element={<HeaderTestPage />} />
         <Route path="/timeline" element={<TimelinePage token={token} setToken={setToken} />} />
         <Route path="/hashtag/:hashtag" element={<HashTagPage/>}/>
+        <Route path="/user/:id" element={<UserPage />} />
       </Routes>
     </BrowserRouter>
   );
