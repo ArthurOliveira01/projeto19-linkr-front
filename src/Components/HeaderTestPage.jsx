@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import {DebounceInput} from 'react-debounce-input';
 
-export const HeaderTestPage = () => {
+export const HeaderTestPage = ({picture}) => {
 
     const [search, setSearch] = useState("");
     const [users, setUsers] = useState([]);
@@ -56,7 +56,7 @@ export const HeaderTestPage = () => {
             </SearchContainer>
             <UserIcon>
             <ion-icon onClick={handleLogout} name="chevron-down-outline"></ion-icon>
-            <img src="https://i.imgur.com/RBviXsl.jpeg" />
+            <img src={picture} />
             {logout ? <LogoutDiv onClick={logoutfunc}>Logout</LogoutDiv> : <></>}
             </UserIcon>
         </HeaderContainer>

@@ -34,7 +34,7 @@ export function TimelinePage(){
 
     return(
         <>
-        <HeaderTestPage />
+        <HeaderTestPage picture={picture} />
         <Main>
             <InfoContainer>
                 <h1>timeline</h1>
