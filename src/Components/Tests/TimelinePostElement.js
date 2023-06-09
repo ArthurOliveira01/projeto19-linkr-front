@@ -11,7 +11,6 @@ import  Modal  from "react-modal";
 
 export default function TimelinesPosts({header}) {
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [liked, setLiked] = useState(false);
     const [posts, setPosts] = useState([]);
     const [ownerId, setOwnerId] = useState();
     const [editingPost, setEditingPost] = useState(null);
@@ -27,7 +26,8 @@ export default function TimelinesPosts({header}) {
             )
             .catch(
                 (err) => {
-                    alert(err.response.message)
+                    console.log(err);
+                    alert(err.response)
                 }
             )
         }
@@ -35,7 +35,7 @@ export default function TimelinesPosts({header}) {
 
     useEffect(
         () => {
-            axios.get(`http://localhost:5000/content`)
+            axios.get(`http://localhost:5000/content`, header)
             .then(
                 (res) => {                    
                     setPosts(res.data);
@@ -49,9 +49,6 @@ export default function TimelinesPosts({header}) {
         }
     , [])
 
-    function like() {
-        setLiked(!liked)
-    }
 
     function openPage(link){
         window.open(link, '_blank')
@@ -120,6 +117,32 @@ export default function TimelinesPosts({header}) {
         },
       };
 
+      function handleLike(idPost, currentState){
+        if(currentState){
+            console.log('teste');
+            axios.delete(`http://localhost:5000/like/${idPost}`, header)
+            .then(res=>{
+                console.log(res)
+                window.location.reload();
+            })
+            .catch(err=> {
+                console.log(err.message)
+            })
+        } else{
+            const body = {
+                idPost: idPost
+            }
+            axios.post("http://localhost:5000/like", body, header)
+            .then(res=>{
+                window.location.reload();
+            })
+            .catch(err=> {
+                console.log(err);
+                return alert(err.response.data);
+            })
+        }
+      }
+
 
     return (
         <>
@@ -133,8 +156,8 @@ export default function TimelinesPosts({header}) {
                   <FotoContainer>
                     <img src={post.foto} />
                     <LikeContainer>
-                      <img src={liked ? HeartRed : Heart} onClick={like} />
-                      <p>10 likes</p>
+                      <img src={post.liked ? HeartRed : Heart} onClick={() => {handleLike(post.id, post.liked)}} />
+                      <p>{post.likes} likes</p>
                     </LikeContainer>
                   </FotoContainer>
       
@@ -187,8 +210,8 @@ export default function TimelinesPosts({header}) {
                   <FotoContainer>
                     <img src={post.foto} />
                     <LikeContainer>
-                      <img src={liked ? HeartRed : Heart} onClick={like} />
-                      <p>10 likes</p>
+                      <img src={post.liked ? HeartRed : Heart} onClick={() => {handleLike(post.id, post.liked)}} />
+                      <p>{post.likes} likes</p>
                     </LikeContainer>
                   </FotoContainer>
       
