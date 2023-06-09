@@ -245,6 +245,18 @@ export default function TimelinesPosts({header, picture}) {
                     </TimelinePostElementContainer>
                     {selectedPostId === post.id ? (
                         <Comments>
+                            {comments.map((com, index) =>{
+                                return(
+                                    <>
+                                        <Profile src={com.foto} />
+                                        <Content>
+                                            <h1>{com.username} <span>{com.owner === true ? 'º post\'s author' : ''}</span></h1>
+                                            <h2>{com.comment}</h2>
+                                            <hr/>
+                                        </Content>
+                                    </>
+                                )
+                            })}
                             <Profile src={picture} />
                             <input onChange={(e) => setNewComment(e.target.value)} placeholder="write a comment"></input>
                             <SendIcon onClick={() => {sendComment(post.id)}} src={send} />
@@ -291,9 +303,11 @@ export default function TimelinesPosts({header, picture}) {
                                     <>
                                         <Profile src={com.foto} />
                                         <Content>
-                                        <h1>{com.username} <span>{com.owner === true ? 'º post\'s author' : ''}</span></h1>
+                                            <h1>{com.username} <span>{com.owner === true ? 'º post\'s author' : ''}</span></h1>
                                             <h2>{com.comment}</h2>
+                                            <hr />
                                         </Content>
+                                        
                                     </>
                                 )
                             })}
@@ -347,6 +361,11 @@ const Content = styled.div`
     }
     span{
         color: #565656;
+    }
+    hr{
+        width: 100%;
+        border-width: 0.5px;
+        border-color: #353535;
     }
 `
 
