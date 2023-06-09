@@ -4,17 +4,21 @@ import HeartRed from "../../Assets/icons8-heart-100 (1).png"
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import urlMetadata from "url-metadata";
 import trash from "../../Assets/trash-outline.svg";
 import pencil from "../../Assets/icons8-edit.svg";
+import comment from "../../Assets/chatbubble-ellipses-outline.svg";
+import send from "../../Assets/send-outline.svg";
 import  Modal  from "react-modal";
 
-export default function TimelinesPosts({header}) {
+export default function TimelinesPosts({header, picture}) {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [posts, setPosts] = useState([]);
     const [ownerId, setOwnerId] = useState();
     const [editingPost, setEditingPost] = useState(null);
+    const [selectedPostId, setSelectedPostId] = useState(null);
+    const [comments, setComments] = useState([]);
     const [newDescription, setNewDescription] = useState('');
+    const [newComment, setNewComment] = useState('');
     let navigate = useNavigate()
     useEffect(
         () => {            
@@ -143,6 +147,38 @@ export default function TimelinesPosts({header}) {
         }
       }
 
+      function handleComment(postID){
+        axios.get(`http://localhost:5000/comment/${postID}`, header)
+            .then(
+                (res) => { 
+                    setSelectedPostId(postID);                   
+                    setComments(res.data);
+                    console.log(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    console.log(err)
+                }
+            )
+      }
+
+      function sendComment(postId){
+        console.log(newComment);
+        const body = {
+            idPost: postId,
+            comment: newComment
+        }
+        axios.post("http://localhost:5000/comment", body, header)
+            .then(res=>{
+                setNewComment('');
+                setSelectedPostId(null);
+            })
+            .catch(err=> {
+                return alert(err.response.data);
+            })
+      }
+
 
     return (
         <>
@@ -152,82 +188,113 @@ export default function TimelinesPosts({header}) {
             posts.map((post, index) => {
             if (post.idUser === ownerId) {
               return (
-                <TimelinePostElementContainer data-test="post" key={index}>
-                  <FotoContainer>
-                    <img src={post.foto} />
-                    <LikeContainer>
-                      <img src={post.liked ? HeartRed : Heart} onClick={() => {handleLike(post.id, post.liked)}} />
-                      <p>{post.likes} likes</p>
-                    </LikeContainer>
-                  </FotoContainer>
-      
-                  <TimelinePostInfoContainer>
-                    <Top>
-                      <h2 data-test="username">{post.username}</h2>
-                      <Icons>
-                        <img onClick={() => {editPost(post.id, post.description)}} src={pencil} />
-                        <img onClick={() => handleModal(post.id)} src={trash} />
-                        <Modal
-                        isOpen={modalIsOpen}
-                        onRequestClose={handleModal}
-                        style={customModalStyles}
-                        contentLabel="Modal"
-                        >
-                            <Box>
-                                <h2>Are you sure you want to delete this post?</h2>
-                                <Buttons>
-                                    <button onClick={handleModal}>No, go back</button>
-                                    <button onClick={() => deletePost(post.id)}>Yes, delete it</button>
-                                </Buttons>
-                            </Box>
-                        </Modal>
-                      </Icons>
-                    </Top>
-                    {editingPost === post.id ? (
-                        <input
-                        type="text"
-                        value={newDescription}
-                        onChange={(e) => setNewDescription(e.target.value)}
-                        onBlur={() => {sendNewPost(post.link)}}
-                        />
-                    ): (
-                        <p data-test="description">{post.description}</p>   
-                    )} 
-                    <SnippetContainer data-test="link" onClick={() => { openPage(post.link) }}>
-                    <div>
-                        <h2>{post.metaTitle}</h2>
-                        <p>{post.metaDescription}</p>
-                        <a href={post.link}>{post.link}</a>
-                      </div>
-                      <img src={post.metaImg} />
-                    </SnippetContainer>
-                  </TimelinePostInfoContainer>
-                </TimelinePostElementContainer>
+                <>
+                    <TimelinePostElementContainer data-test="post" key={index}>
+                    <FotoContainer>
+                        <img src={post.foto} />
+                        <LikeContainer>
+                        <img src={post.liked ? HeartRed : Heart} onClick={() => {handleLike(post.id, post.liked)}} />
+                        <p>{post.likes} likes</p>
+                        <img src={ comment } onClick={() => {handleComment(post.id)}} />
+                        <p>{post.comment} comments</p>
+                        </LikeContainer>
+                    </FotoContainer>
+        
+                    <TimelinePostInfoContainer>
+                        <Top>
+                        <h2 data-test="username">{post.username}</h2>
+                        <Icons>
+                            <img onClick={() => {editPost(post.id, post.description)}} src={pencil} />
+                            <img onClick={() => handleModal(post.id)} src={trash} />
+                            <Modal
+                            isOpen={modalIsOpen}
+                            onRequestClose={handleModal}
+                            style={customModalStyles}
+                            contentLabel="Modal"
+                            >
+                                <Box>
+                                    <h2>Are you sure you want to delete this post?</h2>
+                                    <Buttons>
+                                        <button onClick={handleModal}>No, go back</button>
+                                        <button onClick={() => deletePost(post.id)}>Yes, delete it</button>
+                                    </Buttons>
+                                </Box>
+                            </Modal>
+                        </Icons>
+                        </Top>
+                        {editingPost === post.id ? (
+                            <input
+                            type="text"
+                            value={newDescription}
+                            onChange={(e) => setNewDescription(e.target.value)}
+                            onBlur={() => {sendNewPost(post.link)}}
+                            />
+                        ): (
+                            <p data-test="description">{post.description}</p>   
+                        )} 
+                        <SnippetContainer data-test="link" onClick={() => { openPage(post.link) }}>
+                        <div>
+                            <h2>{post.metaTitle}</h2>
+                            <p>{post.metaDescription}</p>
+                            <a href={post.link}>{post.link}</a>
+                        </div>
+                        <img src={post.metaImg} />
+                        </SnippetContainer>
+                    </TimelinePostInfoContainer>
+                    </TimelinePostElementContainer>
+                    {selectedPostId === post.id ? (
+                        <Comments>
+                            <Profile src={picture} />
+                            <input onChange={(e) => setNewComment(e.target.value)} placeholder="write a comment"></input>
+                            <SendIcon onClick={() => {sendComment(post.id)}} src={send} />
+                        </Comments>
+                    ) :(
+                        <></>
+                    )
+                    
+                    }
+
+                </>
               );
             } else {
               return (
-                <TimelinePostElementContainer data-test="post" key={index}>
-                  <FotoContainer>
-                    <img src={post.foto} />
-                    <LikeContainer>
-                      <img src={post.liked ? HeartRed : Heart} onClick={() => {handleLike(post.id, post.liked)}} />
-                      <p>{post.likes} likes</p>
-                    </LikeContainer>
-                  </FotoContainer>
-      
-                  <TimelinePostInfoContainer>
-                    <h2 data-test="username">{post.username}</h2>
-                    <p data-test="description">{post.description}</p>
-                    <SnippetContainer data-test="link" onClick={() => { openPage(post.link) }}>
-                      <div>
-                        <h2>{post.metatitle}</h2>
-                        <p>{post.metaDescription}</p>
-                        <a href={post.link}>{post.link}</a>
-                      </div>
-                      <img src={post.metaImg} />
-                    </SnippetContainer>
-                  </TimelinePostInfoContainer>
-                </TimelinePostElementContainer>
+                <>
+                    <TimelinePostElementContainer data-test="post" key={index}>
+                    <FotoContainer>
+                        <img src={post.foto} />
+                        <LikeContainer>
+                        <img src={post.liked ? HeartRed : Heart} onClick={() => {handleLike(post.id, post.liked)}} />
+                        <p>{post.likes} likes</p>
+                        <img src={ comment } onClick={() => {handleComment(post.id)}} />
+                        <p>{post.comment} comments</p>
+                        </LikeContainer>
+                    </FotoContainer>
+        
+                    <TimelinePostInfoContainer>
+                        <h2 data-test="username">{post.username}</h2>
+                        <p data-test="description">{post.description}</p>
+                        <SnippetContainer data-test="link" onClick={() => { openPage(post.link) }}>
+                        <div>
+                            <h2>{post.metatitle}</h2>
+                            <p>{post.metaDescription}</p>
+                            <a href={post.link}>{post.link}</a>
+                        </div>
+                        <img src={post.metaImg} />
+                        </SnippetContainer>
+                    </TimelinePostInfoContainer>
+                    </TimelinePostElementContainer>
+                    {selectedPostId === post.id ? (
+                        <Comments>
+                            <Profile src={picture} />
+                            <input onChange={(e) => setNewComment(e.target.value)} placeholder="write a comment"></input>
+                            <SendIcon onClick={() => {sendComment(post.id)}} src={send} />
+                        </Comments>
+                    ) :(
+                        <></>
+                    )
+                    
+                    }
+                </>
               );
             }
           }))}
@@ -239,6 +306,42 @@ const None = styled.p`
     font-family: 'Oswald';
     font-size: 24px;
     color: #FFFFFF;
+`
+
+const Profile = styled.img`
+    width: 39px;
+    height: 39px;
+    border-radius: 100%;
+`
+
+
+const SendIcon = styled.img`
+    width: 14px;
+`
+
+const Comments = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 72%;
+    min-height: 83px;
+    background-color: #1e1e1e;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    font-family: 'Lato';
+    color: white;
+    input{
+        width: 83%;
+        height: 39px;   
+        background-color: #252525;
+        border-color: #252525;
+        border: 0px;
+        font-family: 'Lato';
+        color: white;
+        border-radius: 8px;
+        text-indent: 15px;
+        word-break: break-all;
+    }
 `
 
 const TimelinePostElementContainer = styled.div`
@@ -320,7 +423,7 @@ const FotoContainer = styled.div`
 `
 
 const LikeContainer = styled.div`
-    width: 100%;
+    width: 131%;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -387,6 +490,7 @@ const SnippetContainer = styled.div`
         border-top: solid 1px #4d4d4d;
         border-left: solid 1px #4d4d4d;
         border-bottom: solid 1px #4d4d4d;
+        border-right: solid 1px #4d4d4d;
         padding-left: 12px;
 
         h2 {

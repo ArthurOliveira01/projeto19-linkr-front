@@ -39,7 +39,7 @@ export function TimelinePage(){
                 <PostElement header={header} picture={picture} />
             </PostContent>
             <ContentWrapper>
-                <TimelinesPosts header={header} />
+                <TimelinesPosts header={header} picture={picture} />
             </ContentWrapper>
         </Main>
         </>
