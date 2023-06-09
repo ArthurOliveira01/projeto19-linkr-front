@@ -20,7 +20,7 @@ export default function PostElement({header, picture}) {
             description: description
         }
 
-        axios.post("http://localhost:5000/content", body, header)
+        axios.post("https://linkr-nb8w.onrender.com/content", body, header)
         .then(res=>{
             navigate("/timeline");
             setDisabled(false);

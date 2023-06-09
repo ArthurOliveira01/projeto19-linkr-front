@@ -13,7 +13,7 @@ export default function HashTagPage () {
     const [top, setTop] = useState()
 
     useEffect(()=>{
-        axios.get("http://localhost:5000/hashtags")
+        axios.get("https://linkr-nb8w.onrender.com/hashtags")
         .then(res=>{
             setHashtags(res.data)
             setTop(res.data[0].hashtag)

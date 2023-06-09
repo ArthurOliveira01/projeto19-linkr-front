@@ -18,7 +18,7 @@ export default function SignupPage() {
         if(!email || !password || !username || !foto) {
             setDisabled(false)
             return alert('Todos os campos são obrigatórios')}
-        axios.post("http://localhost:5000/signup", body)
+        axios.post("https://linkr-nb8w.onrender.com/signup", body)
         .then(res=>{
             setDisabled(false)
             alert('Usuário criado com sucesso!')

@@ -23,7 +23,7 @@ export default function TimelinesPosts({header, picture}) {
     let navigate = useNavigate()
     useEffect(
         () => {            
-            axios.get(`http://localhost:5000/info`, header)
+            axios.get(`https://linkr-nb8w.onrender.com/info`, header)
             .then(
                 (res) => {
                     setOwnerId(res.data.id);
@@ -40,7 +40,7 @@ export default function TimelinesPosts({header, picture}) {
 
     useEffect(
         () => {
-            axios.get(`http://localhost:5000/content`, header)
+            axios.get(`https://linkr-nb8w.onrender.com/content`, header)
             .then(
                 (res) => {                    
                     setPosts(res.data);
@@ -60,7 +60,7 @@ export default function TimelinesPosts({header, picture}) {
     }
 
     function deletePost(postId){
-        axios.delete(`http://localhost:5000/content/${postId}`, header)
+        axios.delete(`https://linkr-nb8w.onrender.com/${postId}`, header)
         .then(res=>{
             window.location.reload();
         })
@@ -89,7 +89,7 @@ export default function TimelinesPosts({header, picture}) {
             description: newDescription 
         }
 
-        axios.put(`http://localhost:5000/content`, body, header)
+        axios.put(`https://linkr-nb8w.onrender.com/content`, body, header)
         .then(res=>{
             window.location.reload();
         })
@@ -125,7 +125,7 @@ export default function TimelinesPosts({header, picture}) {
       function handleLike(idPost, currentState){
         if(currentState){
             console.log('teste');
-            axios.delete(`http://localhost:5000/like/${idPost}`, header)
+            axios.delete(`https://linkr-nb8w.onrender.com/like/${idPost}`, header)
             .then(res=>{
                 console.log(res)
                 window.location.reload();
@@ -137,7 +137,7 @@ export default function TimelinesPosts({header, picture}) {
             const body = {
                 idPost: idPost
             }
-            axios.post("http://localhost:5000/like", body, header)
+            axios.post("https://linkr-nb8w.onrender.com/like", body, header)
             .then(res=>{
                 window.location.reload();
             })
@@ -149,7 +149,7 @@ export default function TimelinesPosts({header, picture}) {
       }
 
       function handleComment(postID){
-        axios.get(`http://localhost:5000/comment/${postID}`, header)
+        axios.get(`https://linkr-nb8w.onrender.com/comment/${postID}`, header)
             .then(
                 (res) => { 
                     setSelectedPostId(postID);                   
@@ -170,7 +170,7 @@ export default function TimelinesPosts({header, picture}) {
             idPost: postId,
             comment: newComment
         }
-        axios.post("http://localhost:5000/comment", body, header)
+        axios.post("https://linkr-nb8w.onrender.com/comment", body, header)
             .then(res=>{
                 setNewComment('');
                 setSelectedPostId(null);

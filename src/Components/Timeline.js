@@ -13,7 +13,7 @@ export function TimelinePage(){
     const header = { headers: { Authorization: `Bearer ${local}` } };
     useEffect(
         () => {
-            axios.get(`http://localhost:5000/info`, header)
+            axios.get(`https://linkr-nb8w.onrender.com/info`, header)
             .then(
                 (res) => {
                     setPicture(res.data.foto);

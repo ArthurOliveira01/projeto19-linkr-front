@@ -18,7 +18,7 @@ export function UserPage(){
 
     useEffect(
         () => {console.log(parseInt(id));
-            axios.get(`http://localhost:5000/user/${id}`)
+            axios.get(`https://linkr-nb8w.onrender.com/user/${id}`)
             .then(
                 (res) => {
                     setPosts(res.data.posts);
@@ -36,7 +36,7 @@ export function UserPage(){
 
     function searchusers(e){
         console.log(e.target.value);
-        axios.get("http://localhost:5000/users", {headers: {search: e.target.value}})
+        axios.get("https://linkr-nb8w.onrender.com/users", {headers: {search: e.target.value}})
         .then(
             (res) => {
                 setUsers(res.data)

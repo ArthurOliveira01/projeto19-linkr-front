@@ -16,7 +16,7 @@ export default function SigninPage() {
             return alert('Todas as informações são necessárias para login')}
         const body = {email: email, password: password}
 
-        axios.post("http://localhost:5000/", body)
+        axios.post("https://linkr-nb8w.onrender.com/", body)
         .then(res=>{
             let tab = res.data
             tab = tab.token;
