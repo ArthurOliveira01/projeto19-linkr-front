@@ -28,6 +28,8 @@ export default function PostElement({header, picture}) {
         })
         .catch(err=> {
             console.log(err);
+            setDisabled(false);
+            return alert(err.response.data);
         })
     }
     return(

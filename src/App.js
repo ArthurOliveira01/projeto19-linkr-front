@@ -10,7 +10,6 @@ import HashTagPage from "./Components/HashTagPage";
 
 
 function App() {
-  const [token, setToken] = useState('');
 
   return (
     <BrowserRouter>
@@ -19,7 +18,7 @@ function App() {
         <Route path="/sign-up" element={<SignupPage/>}/>
         <Route path="/teste" element={<TestPage/>}/>
         <Route path="/header" element={<HeaderTestPage />} />
-        <Route path="/timeline" element={<TimelinePage token={token} setToken={setToken} />} />
+        <Route path="/timeline" element={<TimelinePage />} />
         <Route path="/hashtag/:hashtag" element={<HashTagPage/>}/>
         <Route path="/user/:id" element={<UserPage />} />
       </Routes>

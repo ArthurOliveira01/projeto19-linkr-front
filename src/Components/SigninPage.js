@@ -18,7 +18,11 @@ export default function SigninPage() {
 
         axios.post("http://localhost:5000/", body)
         .then(res=>{
-            localStorage.setItem("token", res.data)
+            let tab = res.data
+            tab = tab.token;
+            const token = `${tab}`
+            console.log(token);
+            localStorage.setItem("token", token)
             navigate("/timeline")
         })
         .catch(err=> {

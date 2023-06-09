@@ -9,23 +9,20 @@ import trash from "../../Assets/trash-outline.svg";
 import pencil from "../../Assets/icons8-edit.svg";
 import  Modal  from "react-modal";
 
-export default function TimelinesPosts() {
+export default function TimelinesPosts({header}) {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [liked, setLiked] = useState(false);
     const [posts, setPosts] = useState([]);
     const [ownerId, setOwnerId] = useState();
-    const header = { headers: { Authorization: `Bearer 9810b939-b106-43cd-8641-cf3adfea9f4e` } };
+    const [editingPost, setEditingPost] = useState(null);
+    const [newDescription, setNewDescription] = useState('');
     let navigate = useNavigate()
     useEffect(
-        () => {
-            console.log(header);
-            
+        () => {            
             axios.get(`http://localhost:5000/info`, header)
             .then(
                 (res) => {
                     setOwnerId(res.data.id);
-                    console.log(res.data);
-                    console.log(res.data.foto);
                 }
             )
             .catch(
@@ -42,7 +39,6 @@ export default function TimelinesPosts() {
             .then(
                 (res) => {                    
                     setPosts(res.data);
-                    console.log(res.data);
                 }
             )
             .catch(
@@ -67,7 +63,7 @@ export default function TimelinesPosts() {
             window.location.reload();
         })
         .catch(err=> {
-            alert(err.response.message)
+            alert("It wasn't possible to delete the post, try again")
         })
     }
 
@@ -78,6 +74,28 @@ export default function TimelinesPosts() {
             setModalIsOpen(true);
         }
     }
+
+    function editPost(id, description){
+        setEditingPost(id);
+        setNewDescription(description);
+    }
+
+    function sendNewPost(link){
+        const body ={
+            postId: editingPost,
+            link: link,
+            description: newDescription 
+        }
+
+        axios.put(`http://localhost:5000/content`, body, header)
+        .then(res=>{
+            window.location.reload();
+        })
+        .catch(err=> {
+            alert(err.response.message)
+        })
+    }
+
 
     const customModalStyles = {
         overlay: {
@@ -105,7 +123,10 @@ export default function TimelinesPosts() {
 
     return (
         <>
-          {posts.map((post, index) => {
+          {posts.length === 0 ? (
+            <None>There are no posts yet</None>
+          ) : (
+            posts.map((post, index) => {
             if (post.idUser === ownerId) {
               return (
                 <TimelinePostElementContainer data-test="post" key={index}>
@@ -121,7 +142,7 @@ export default function TimelinesPosts() {
                     <Top>
                       <h2 data-test="username">{post.username}</h2>
                       <Icons>
-                        <img src={pencil} />
+                        <img onClick={() => {editPost(post.id, post.description)}} src={pencil} />
                         <img onClick={() => handleModal(post.id)} src={trash} />
                         <Modal
                         isOpen={modalIsOpen}
@@ -139,14 +160,23 @@ export default function TimelinesPosts() {
                         </Modal>
                       </Icons>
                     </Top>
-                    <p data-test="description">{post.description}</p>
+                    {editingPost === post.id ? (
+                        <input
+                        type="text"
+                        value={newDescription}
+                        onChange={(e) => setNewDescription(e.target.value)}
+                        onBlur={() => {sendNewPost(post.link)}}
+                        />
+                    ): (
+                        <p data-test="description">{post.description}</p>   
+                    )} 
                     <SnippetContainer data-test="link" onClick={() => { openPage(post.link) }}>
-                      <div>
-                        <h2>Como aplicar o Material UI em um projeto React</h2>
-                        <p>Hey! I have moved this tutorial to my personal blog. Same content, new location. Sorry about making you click through to another page</p>
-                        <a href={post.link} target="_blank">{post.link}</a>
+                    <div>
+                        <h2>{post.metaTitle}</h2>
+                        <p>{post.metaDescription}</p>
+                        <a href={post.link}>{post.link}</a>
                       </div>
-                      <img src="https://images2.alphacoders.com/649/649995.jpg" />
+                      <img src={post.metaImg} />
                     </SnippetContainer>
                   </TimelinePostInfoContainer>
                 </TimelinePostElementContainer>
@@ -167,20 +197,26 @@ export default function TimelinesPosts() {
                     <p data-test="description">{post.description}</p>
                     <SnippetContainer data-test="link" onClick={() => { openPage(post.link) }}>
                       <div>
-                        <h2>Como aplicar o Material UI em um projeto React</h2>
-                        <p>Hey! I have moved this tutorial to my personal blog. Same content, new location. Sorry about making you click through to another page</p>
+                        <h2>{post.metatitle}</h2>
+                        <p>{post.metaDescription}</p>
                         <a href={post.link}>{post.link}</a>
                       </div>
-                      <img src="https://images2.alphacoders.com/649/649995.jpg" />
+                      <img src={post.metaImg} />
                     </SnippetContainer>
                   </TimelinePostInfoContainer>
                 </TimelinePostElementContainer>
               );
             }
-          })}
+          }))}
         </>
       )
 }
+
+const None = styled.p`
+    font-family: 'Oswald';
+    font-size: 24px;
+    color: #FFFFFF;
+`
 
 const TimelinePostElementContainer = styled.div`
     width: 70%;
@@ -308,6 +344,9 @@ const TimelinePostInfoContainer = styled.div`
         padding: 10px 0 0 0;
     }
 
+    input{
+        margin-bottom: 15px;
+    }
     
 `
 
