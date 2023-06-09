@@ -19,6 +19,7 @@ export default function TimelinesPosts({header, picture}) {
     const [comments, setComments] = useState([]);
     const [newDescription, setNewDescription] = useState('');
     const [newComment, setNewComment] = useState('');
+    const [postOwner, setPostOwner] = useState(false);
     let navigate = useNavigate()
     useEffect(
         () => {            
@@ -285,6 +286,17 @@ export default function TimelinesPosts({header, picture}) {
                     </TimelinePostElementContainer>
                     {selectedPostId === post.id ? (
                         <Comments>
+                            {comments.map((com, index) =>{
+                                return(
+                                    <>
+                                        <Profile src={com.foto} />
+                                        <Content>
+                                        <h1>{com.username} <span>{com.owner === true ? 'º post\'s author' : ''}</span></h1>
+                                            <h2>{com.comment}</h2>
+                                        </Content>
+                                    </>
+                                )
+                            })}
                             <Profile src={picture} />
                             <input onChange={(e) => setNewComment(e.target.value)} placeholder="write a comment"></input>
                             <SendIcon onClick={() => {sendComment(post.id)}} src={send} />
@@ -314,6 +326,30 @@ const Profile = styled.img`
     border-radius: 100%;
 `
 
+const Content = styled.div`
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    width: 90%;
+    height: 74px;
+    font-family: 'Lato';
+    color: #f3f3f3;
+    h1{
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    h2{
+        font-size: 14px;
+        font-weight: 400;
+        margin-top: 5px;
+    }
+    span{
+        color: #565656;
+    }
+`
+
 
 const SendIcon = styled.img`
     width: 14px;
@@ -322,6 +358,7 @@ const SendIcon = styled.img`
 const Comments = styled.div`
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     justify-content: space-evenly;
     width: 72%;
     min-height: 83px;
