@@ -4,14 +4,10 @@ import styled from "styled-components";
 import axios from "axios";
 import PostElement from "./Tests/PostElement";
 import TimelinesPosts from "./Tests/TimelinePostElement";
-import arrowUp from "../Assets/arrow-142-32.png";
-import arrowDown from "../Assets/arrow-204-32.png";
-import urlMetadata from "url-metadata"
 import { HeaderTestPage } from "./HeaderTestPage";
 
 
 export function TimelinePage(){
-    const [clicked, setClicked] = useState(false);
     const [picture, setPicture] = useState('');
     const local = localStorage.getItem('token');
     const header = { headers: { Authorization: `Bearer ${local}` } };
