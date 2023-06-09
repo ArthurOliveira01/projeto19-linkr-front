@@ -4,6 +4,8 @@ import styled from "styled-components";
 import axios from "axios";
 import { HeaderTestPage } from "./HeaderTestPage";
 import { DebounceInput } from "react-debounce-input";
+import InfiniteScroll from 'react-infinite-scroller';
+import { useInterval } from 'usehooks-ts'
 
 export function UserPage(){
 
@@ -13,8 +15,44 @@ export function UserPage(){
     const [users, setUsers] = useState([1]);
     const navigate = useNavigate();
     const { id } = useParams(); 
-    const [user, setUser]= useState({name: "", img: ""})
-    
+    const [user, setUser]= useState({name: "", img: ""});
+    const [button, setButton] = useState(true);
+    const [postdiff, setPostDiff] = useState(0); 
+
+    const [count, setCount] = useState(0)
+  // Dynamic delay
+  const [delay, setDelay] = useState(15000)
+  // ON/OFF
+  const [still, setStill] = useState(true)
+
+  useInterval(
+      () => {console.log(parseInt(id));
+        axios.get(`http://localhost:5000/user/${id}`)
+        .then(
+            (res) => {
+                if(res.data.posts.length > posts.length){
+                    setPostDiff(res.data.posts.length - posts.length);
+                setButton(true);
+                
+                setUser({name: res.data.name, img: res.data.foto}) 
+                }
+                else{
+                    setButton(false)
+                }
+               
+                
+            }
+        )
+        .catch(
+            (err) => {
+                alert(err.response.status)
+            }
+        );
+    },
+    // Delay in milliseconds or null to stop it
+    still ? delay : null,
+  )
+      
 
     useEffect(
         () => {console.log(parseInt(id));
@@ -33,6 +71,21 @@ export function UserPage(){
             
         }
     , [])
+
+    function loadMore(page){
+        axios.get(`http://localhost:5000/user/${id}`, {headers: {page}})
+        .then(
+            (res) => {
+                setPosts(res.data.posts);
+                setUser({name: res.data.name, img: res.data.foto}) 
+            }
+        )
+        .catch(
+            (err) => {
+                alert(err.response.status)
+            }
+        );
+    }
 
     function searchusers(e){
         console.log(e.target.value);
@@ -70,7 +123,27 @@ export function UserPage(){
                 <h1>{user.name}'s posts</h1>
             </InfoContainer>
             <ContentWrapper>
-                <PostContainer>
+                <PostContainer
+                pageStart={0}
+                loadMore={loadMore}
+                hasMore={true || false}
+                loader={<div className="loader" key={0}>Loading ...</div>}
+                useWindow={false}>
+                    <LoadMoreButton onClick={() => {console.log(parseInt(id));
+            axios.get(`http://localhost:5000/user/${id}`)
+            .then(
+                (res) => {
+                    setPosts(res.data.posts);
+                    setUser({name: res.data.name, img: res.data.foto}) 
+                }
+            )
+            .catch(
+                (err) => {
+                    alert(err.response.status)
+                }
+            );
+            
+        }} button={button}>{postdiff} new posts, load more!</LoadMoreButton>
                     {
                         posts.map(
                             (p) => <Post user={user} name={user.name} text={p.description} />
@@ -147,7 +220,7 @@ box-sizing: border-box;
   }
 `
 
-const PostContainer = styled.div`
+const PostContainer = styled(InfiniteScroll)`
 width: 65%;
 @media (max-width: 768px) {
     width: 100%;
@@ -452,4 +525,26 @@ const SnippetContainer = styled.div`
         height: 170px;
         border-radius: 0 11px 11px 0;
     }
+`
+
+const LoadMoreButton = styled.button`
+background: #1877F2;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+border-radius: 16px;
+width: 100%;
+height: 61px;
+display: flex;
+align-items: center;
+justify-content: center;
+border: 0;
+box-sizing: border-box;
+display: ${props => props.button ? "block" : "none"};
+
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 19px;
+
+color: #FFFFFF;
 `

@@ -10,6 +10,8 @@ export const HeaderTestPage = ({picture}) => {
     const [users, setUsers] = useState([]);
     const [logout, setLogout] = useState(false);
     const navigate = useNavigate();
+    //const auth = localStorage.getItem('token');
+    const auth = "123";
 
     function handleLogout(e){
         if(logout === false){
@@ -24,7 +26,7 @@ export const HeaderTestPage = ({picture}) => {
 
     function searchusers(e){
         console.log(e.target.value)
-        axios.get("http://localhost:5000/users", {headers: {search: e.target.value}})
+        axios.get("http://localhost:5000/users", {headers: {search: e.target.value, Authorization: `Bearer ${auth}`}})
         .then(
             (res) => {
                 setUsers(res.data)
@@ -50,7 +52,7 @@ export const HeaderTestPage = ({picture}) => {
             <></>:
             <UserList>
                 {users.map(
-                    (u) => <User name={u.name} foto={u.foto} />
+                    (u) => <User name={u.name} foto={u.foto} follow={u.follow} />
                 )}
                 </UserList>}
             </SearchContainer>
@@ -176,7 +178,7 @@ const User = (props) => {
     return(
         <UserWrapper>
             <img src={props.foto} />
-            <h2>{props.name}</h2>
+            <h2>{props.name}<span>{props.follow === true ? "following" : <></>}</span></h2>
         </UserWrapper>
     )
 }
@@ -198,5 +200,15 @@ font-size: 19px;
 line-height: 23px;
 color: #515151;
 }
+span{
+    font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 19px;
+line-height: 23px;
 
+color: #C5C5C5;
+
+
+}
 `
