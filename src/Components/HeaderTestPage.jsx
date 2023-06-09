@@ -26,7 +26,7 @@ export const HeaderTestPage = ({picture}) => {
 
     function searchusers(e){
         console.log(e.target.value)
-        axios.get("http://localhost:5000/users", {headers: {search: e.target.value, Authorization: `Bearer ${auth}`}})
+        axios.get("https://linkr-nb8w.onrender.com/users", {headers: {search: e.target.value, Authorization: `Bearer ${auth}`}})
         .then(
             (res) => {
                 setUsers(res.data)
